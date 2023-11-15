@@ -1,14 +1,11 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
+<!--      <router-link to="/">MainIndex</router-link>-->
     <router-view/>
   </div>
 </template>
 
-<style lang="less">
+<style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -30,3 +27,6 @@ nav {
   }
 }
 </style>
+<script setup>
+import MainIndex from "@/views/Index.vue";
+</script>
