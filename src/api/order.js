@@ -1,6 +1,7 @@
+import TestRequst from "@/js/TestRequst";
 // 查询列表页接口
-let getOrderDetailPage = (params) => {
-  return $axios({
+export function getOrderDetailPage (params) {
+  return TestRequst({
     url: '/order/page',
     method: 'get',
     params
@@ -8,16 +9,16 @@ let getOrderDetailPage = (params) => {
 }
 
 // 查看接口
-const queryOrderDetailById = (id) => {
-  return $axios({
+export function queryOrderDetailById (id) {
+  return TestRequst({
     url: `/orderDetail/${id}`,
     method: 'get'
   })
 }
 
 // 取消，派送，完成接口
-const editOrderDetail = (params) => {
-  return $axios({
+export function editOrderDetail (params) {
+  return TestRequst({
     url: '/order',
     method: 'put',
     data: { ...params }

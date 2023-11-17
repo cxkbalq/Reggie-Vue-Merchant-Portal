@@ -1,71 +1,80 @@
 <template>
-<div id="app">
-  <el-container>
-    <el-aside width="200px">
-      <div id="mainleft" >
-        <img src="@/images/login/login-logo.png" alt="Logo" id="logo">
-        <el-menu
-          default-active="1"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-          background-color="rgb(52, 55, 68)"
-          text-color="#fff"
-          active-text-color="#ffd04b">
-          <el-menu-item index="1" @click="show(1)">
-            <i class="el-icon-s-custom"></i>
-            <span slot="title">员工管理</span>
-          </el-menu-item>
-          <el-menu-item index="2" @click="show(2)">
-            <i class="el-icon-menu"></i>
-            <span slot="title">分类管理</span>
-          </el-menu-item>
-          <el-menu-item index="3" @click="show(3)">
-            <i class="el-icon-s-data"></i>
-            <span slot="title">菜品管理</span>
-          </el-menu-item>
-          <el-menu-item index="4" @click="show(4)">
-            <i class="el-icon-dish"></i>
-            <span slot="title">套餐管理</span>
-          </el-menu-item>
-          <el-menu-item index="5" @click="show(5)">
-            <i class="el-icon-tickets"></i>
-            <span slot="title">订单明细</span>
-          </el-menu-item>
-          <el-menu-item index="6" @click="show(6)">
-            <i class="el-icon-s-data"></i>
-            <span slot="title">门店管理</span>
-          </el-menu-item>
-        </el-menu>
+
+  <div class="app" id="app">
+    <div class="app-wrapper openSidebar clearfix">
+      <!-- sidebar -->
+      <div class="sidebar-container">
+        <div class="logo">
+          <!-- <img src="images/logo.png" width="122.5" alt="" /> -->
+          <img src="@/images/login/login-logo.png" alt="" style="width: 117px; height: 32px" />
+
+        </div>
+        <div id="menu-item">
+        <el-scrollbar wrap-class="scrollbar-wrapper">
+            <el-menu
+              default-active="1"
+              class="el-menu-vertical-demo"
+              @open="handleOpen"
+              @close="handleClose"
+              background-color="rgb(52, 55, 68)"
+              text-color="#fff"
+              active-text-color="#ffd04b">
+              <el-menu-item index="1" @click="show(1)">
+                <i class="el-icon-s-custom"></i>
+                <span slot="title">员工管理</span>
+              </el-menu-item>
+              <el-menu-item index="2" @click="show(2)">
+                <i class="el-icon-menu"></i>
+                <span slot="title">分类管理</span>
+              </el-menu-item>
+              <el-menu-item index="3" @click="show(3)">
+                <i class="el-icon-s-data"></i>
+                <span slot="title">菜品管理</span>
+              </el-menu-item>
+              <el-menu-item index="4" @click="show(4)">
+                <i class="el-icon-dish"></i>
+                <span slot="title">套餐管理</span>
+              </el-menu-item>
+              <el-menu-item index="5" @click="show(5)">
+                <i class="el-icon-tickets"></i>
+                <span slot="title">订单明细</span>
+              </el-menu-item>
+              <el-menu-item index="6" @click="show(6)">
+                <i class="el-icon-s-data"></i>
+                <span slot="title">门店管理</span>
+              </el-menu-item>
+              <el-menu-item index="7" @click="show(7)">
+                <i class="el-icon-s-data"></i>
+                <span slot="title">高德测试</span>
+              </el-menu-item>
+            </el-menu>
+        </el-scrollbar>
+        </div>
       </div>
-    </el-aside>
-    <el-container>
-      <el-header>
+      <div class="main-container">
+        <!-- <navbar /> -->
         <div class="navbar">
           <div class="head-lable">
-<!--              <span v-if="true" class="goBack"-->
-<!--              ><img src="@/images/icons/icon_index.png" alt="" /> 返回</span-->
-<!--              >-->
-<!--            <span>{{管理员}}</span>-->
+              <span v-if="goBackFlag" class="goBack" @click="goBack()"
+              ><img src="@/images/icons/btn_back@2x.png" alt="" /> 返回</span
+              >
+            <span>{{headTitle}}</span>
           </div>
           <div class="right-menu">
-            <div class="avatar-wrapper">{{username}}</div>
+            <div class="avatar-wrapper">{{ userInfo.name }}</div>
             <!-- <div class="logout" @click="logout">退出</div> -->
-<!--            <img src="@/images/icons/btn_close@2x.png" class="outLogin" alt="退出" @click="logout" />-->
-            <img src="@/images/icons/btn_close@2x.png" class="outLogin" @click="userTC" />
+            <img src="@/images/icons/btn_close@2x.png" class="outLogin" alt="退出" @click="userTC" />
           </div>
         </div>
-      </el-header>
 
-<!--      <el-main>hahah</el-main>-->
-<!--      这个里面用来填充页面-->
-      <div id="main">
-        <component :is="path" id=""></component>
+        <div class="app-main">
+          <div class="divTmp" >
+            <component :is="path" id="test"></component>
+          </div>
+        </div>
       </div>
-    </el-container>
-  </el-container>
-
-</div>
+    </div>
+  </div>
 
 </template>
 
@@ -76,34 +85,49 @@ import FoodIndex from "@/views/food/Index.vue";
 import FoodAdd from "@/views/food/Add.vue";
 import CategoryIndex from "@/views/category/Index.vue";
 import MendainIndex from "@/views/mendian/Index.vue";
+import MendianAdd from "@/views/mendian/Add.vue";
 import OrderIndex from "@/views/order/Index.vue";
 import MemberAdd from "@/views/member/Add.vue";
-// import router from "@/router";
+import ComboAdd from "@/views/combo/Add.vue";
 
 export default {
   name: 'MainIndex',
-  components: {MenberMain,ComboIndex,FoodIndex,CategoryIndex,MendainIndex,OrderIndex,MemberAdd,FoodAdd},
-  data(){
-    return{
+  //注册需要使用的路由
+  components: {MenberMain,ComboIndex,FoodIndex,CategoryIndex,
+    MendainIndex,OrderIndex,MemberAdd,FoodAdd,ComboAdd,MendianAdd},
+  data() {
+    return {
       vaIndex:1,
-      currentComponent:this.$store.state.pathstate, // 默认显示MemberMain组件
-      username:JSON.parse(localStorage.getItem('userInfo')).username
+      currentComponent:this.$store.state.obj.pathstate, // 默认显示MemberMain组件
+      username:JSON.parse(localStorage.getItem('userInfo')).username,
+      defAct: '2',
+      menuActived: '2',
+      userInfo: {},
+      headTitle: "员工管理",
+      goBackFlag: false,
+      loading: true,
+      timer: null
     }
-  },
-  async created() {
-    //初始化操作
-      if(!JSON.parse(localStorage.getItem('userInfo')).username){
-        this.username=JSON.parse(localStorage.getItem('userInfo')).username
-      }else {
-        //返回到登录界面
-      }
   },
   computed:{
     path(){
       return this.$store.state.obj.pathstate
     }
   },
-  methods:{
+  created() {
+    console.log(this.$store.state.pathstate)
+    const userInfo = localStorage.getItem('userInfo')
+    if (userInfo) {
+      this.userInfo = JSON.parse(userInfo)
+    }else {
+      this.$router.push('/login')
+    }
+  },
+  beforeDestroy() {
+    this.timer = null
+    clearTimeout(this.timer)
+  },
+  methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -115,21 +139,26 @@ export default {
       switch (flag){
         case 1:
           this.$store.commit('update','MenberMain') ;
+          this.headTitle="员工管理"
           break;
         case 2:
           this.$store.commit('update','CategoryIndex')
           break;
         case 3:
           this.$store.commit('update','FoodIndex');
+          this.headTitle="菜品管理"
           break;
         case 4:
           this.$store.commit('update','ComboIndex');
+          this.headTitle="套餐管理"
           break;
         case 5:
           this.$store.commit('update','OrderIndex') ;
+          this.headTitle="订单明细"
           break;
         case 6:
-          this.$store.commit('update','MendainIndex');
+          this.$store.commit('update','MendainIndex')
+          this.headTitle="门店管理"
           break;
         default:
           this.currentComponent = 'DefaultComponent'; // 如果flag的值不匹配任何case，可以在default中设置一个默认值
@@ -148,52 +177,38 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../css/main.css";
-#mainleft{
-  padding-top: 60px;
+@import "@/styles/index.css";
+#menu-item{
+  height: 700px;
+  width: 191px;
 }
-#main{
-  height: 860px;
-  background-color: #f3f4f7;
+#test{
+  overflow-y: auto; /* 或 auto */
+  overflow-x: hidden;
+  height: 750px; /* 设置容器的高度 */
 }
-#head-main{
-  position: absolute;
-  background-color: red;
-  //height: 900px;
-  height: 60px;
-  width: 1645px;
+.body{
+  min-width: 1366px;
 }
-#head-left{
-  position: absolute;
-  background-color: #00ffe1;
-  width: 100px;
-  height: 60px;
-  right: 10px;
+.app-main{
+  height: calc(100% - 64px);
 }
-#head-rig{
-  position: absolute;
-  background-color: #5daf34;
-  width: 50px;
-  height: 60px;
-  left: 10px;
+.divTmp{
+  width: 100%;
+  height: 100%;
 }
-#yg_id{
-  position: absolute;
-  top: -20px;
+#test{
+  margin-top: 10px;
+  height: 600px;
+  overflow-y: scroll; /* 或 auto */
 }
-#zhanghu{
-  position: absolute;
-  top: -10px;
-  right: 10px;
+.app-main {
+  width: 100%;
+  height: 100%;
 }
 #logo {
   text-align: center;
   background-color: rgb(52, 55, 68);
-  /* height: 100px;
-  line-height: 100px;
-  padding: 12px 5px; */
-  //width: 20px;
-  //height: 20px;
   padding: 46px 37px 67px 36px;
 }
 #2x_png{

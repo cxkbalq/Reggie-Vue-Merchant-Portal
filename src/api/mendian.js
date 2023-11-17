@@ -1,7 +1,7 @@
-
+import TestRequst from "@/js/TestRequst";
 //分页查询
-let getmendianPage = (params) => {
-    return $axios({
+export function getmendianPage  (params) {
+    return TestRequst({
         url: '/mendian/page',
         method: 'get',
         params
@@ -9,8 +9,8 @@ let getmendianPage = (params) => {
 }
 
 //状态更改
-function enableOrDisableEmployee (params) {
-    return $axios({
+export function enableOrDisableEmployee (params) {
+    return TestRequst({
         url: '/mendian',
         method: 'put',
         data: { ...params }
@@ -18,15 +18,15 @@ function enableOrDisableEmployee (params) {
 }
 
 //信息回读
-const querymendianById = (id) => {
-    return $axios({
+export function querymendianById  (id) {
+    return TestRequst({
         url: `/mendian/${id}`,
         method: 'get'
     })
 }
 //获得创建人下的所有员工信息
-let querysupersonList = (id) => {
-    return $axios({
+export function querysupersonList (id) {
+    return TestRequst({
         url: `/mendian/supersonList/${id}`,
         method: 'get'
     })

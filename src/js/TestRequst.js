@@ -3,7 +3,8 @@ import Vue from 'vue'; // 确保导入 Vue
 import store from "@/store";
 const instance = axios.create({
   baseURL: 'http://127.0.0.1:8080/',
-  timeout:3000,
+  // baseURL: 'http://123.60.129.35:8080/',
+  timeout:16000,
 });
 
 instance.interceptors.request.use(
@@ -17,6 +18,9 @@ instance.interceptors.request.use(
     if (userInfo && userInfo.id) {
       console.log(userInfo.id);
       config.headers['employee'] = userInfo.id;
+    }else {
+      //直接退出到登录面
+      // window.location.assign('http://localhost:8081/login');
     }
     // 在这里可以进行一些请求前的操作
     let a=store.state.obj.loading
@@ -39,7 +43,17 @@ instance.interceptors.response.use(
     store.commit('updateloading',false)
     if (msg == 'NOT_LOGIN') {
       localStorage.removeItem('userInfo');
-      Vue.prototype.$router.push("/login")
+      //消息提示
+       Vue.prototype.$message({
+          message: "当前登录过期，正在为你跳转到登录页面",
+          type: 'error',
+          duration: 0,
+        })
+      // 添加延迟 2秒后执行的操作,优化用户体验
+      setTimeout(() => {
+        window.location.assign('http://localhost:8081/login');
+      }, 1000);
+      return response.data;
     } else {
       return response.data;
     }

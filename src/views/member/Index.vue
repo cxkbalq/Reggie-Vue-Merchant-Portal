@@ -183,7 +183,7 @@ export default {
 }
 </script>
 <style lang="css">
-@import "../../styles/page.css";
+@import "@/styles/page.css";
 #member-app  .notAdmin::after{
   border: 0 !important;
 }

@@ -168,8 +168,20 @@ export default {
       this.page = 1;
       this.init();
     },
+    //添加套餐
     addSetMeal(st) {
-      if (st === 'add') {
+      if (st === 'add'){
+        //跳转添加页面
+        this.$store.commit("updateflag",2)
+        this.$store.commit("updateid",0)
+        console.log("状态为")
+        this.$store.commit("update","ComboAdd")
+      } else {
+        //跳转修改页面
+        //在store里设置需要更改的id
+        this.$store.commit("updateid",st)
+        console.log(this.$store.state.obj.pathid)
+        this.$store.commit("update","ComboAdd")
       }
     },
     deleteHandle(type, id) {

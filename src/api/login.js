@@ -1,6 +1,5 @@
-
 import TestRequst from "@/js/TestRequst";
- export function loginApi(data) {
+export function loginApi(data) {
   return TestRequst({
     'url': '/employee/login',
     'method': 'post',

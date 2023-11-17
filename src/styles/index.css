@@ -2,9 +2,9 @@
   position: relative;
   height: 100%;
   width: 100%;
-  overflow-y: hidden;
+  overflow-y: auto;
   min-width: 1366px;
-  overflow-x: auto;
+  /*overflow-x: auto;*/
   display: flex;
 }
 .drawer-bg {

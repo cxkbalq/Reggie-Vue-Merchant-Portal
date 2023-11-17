@@ -43,7 +43,13 @@ export function querySetmealById  (id)  {
     method: 'get'
   })
 }
-
+export function getCategoryList(params) {
+  return TestRequst({
+    url: '/category/list',
+    method: 'get',
+    params
+  })
+}
 // 批量起售禁售
 export function setmealStatusByStatus  (params)  {
   return TestRequst({
@@ -51,10 +57,4 @@ export function setmealStatusByStatus  (params)  {
     method: 'post',
     params: { ids: params.ids }
   })
-}
-export default {
-  getSetmealPage,
-  deleteSetmeal,
-  editSetmeal,
-  addSetmeal
 }

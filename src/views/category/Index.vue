@@ -289,5 +289,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../styles/page.css";
+@import "@/styles/page.css";;
 </style>

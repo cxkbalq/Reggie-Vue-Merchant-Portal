@@ -92,6 +92,7 @@ export default {
 </script>
 
 <style lang="css">
+@import "@/styles/page.css";
 .login {
   display: flex;
   justify-content: center;

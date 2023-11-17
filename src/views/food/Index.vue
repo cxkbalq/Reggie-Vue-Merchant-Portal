@@ -257,5 +257,5 @@ export default {
 }
 </script>
 <style scoped lang="less">
-@import "../../styles/page.css";
+@import "@/styles/page.css";
 </style>
