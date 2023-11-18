@@ -14,10 +14,11 @@ import LoginIndex from "@/views/backend/login/Index.vue";
 import ComboAdd from "@/views/backend/combo/Add.vue";
 import Gaode from "@/views/GaoDe.vue";
 import FrontLogin from "@/views/fonts/login.vue"
+import FrontIndex from "@/views/fonts/Index.vue"
 // 注册路由
 Vue.use(VueRouter)
 const router =new VueRouter({
-  mode:'history',
+  // mode:'history',
   routes: [
     //这些是商家端
    {path: '/page/member/list', component:MenberMain},
@@ -35,6 +36,7 @@ const router =new VueRouter({
    {path: '/gaode', component:Gaode},
     //这些是用户端
     {path: '/front/login', component:FrontLogin},
+    {path: '/front/index', component:FrontIndex},
  ]
 })
 //全局守卫拦截器

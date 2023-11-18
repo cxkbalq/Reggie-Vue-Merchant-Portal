@@ -367,6 +367,7 @@ export default {
             dishId: obj.dishId,
             name: obj.name,
             price: obj.price,
+            image:obj.image
           }))
           prams.status = this.ruleForm ? 1 : 0
           prams.categoryId = this.ruleForm.idType

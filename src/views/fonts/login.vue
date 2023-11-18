@@ -13,20 +13,26 @@
   </div>
 </template>
 <script>
+import setRem from "@/js/base";
+import {loginoutApi,loginApi,sendMsgApi} from "@/api/front/login";
+import FrontRequst from "@/js/FrontRequst";
+
 export default {
   name: "FrontLogin",
   data(){
     return {
       form:{
-        phone:'',
-        code:''
+        phone:'17856796238',
+        code:'1234'
       },
       msgFlag:false,
       loading:false
     }
   },
   computed:{},
-  created(){},
+  created(){
+    setRem(document, window);
+  },
   mounted(){},
   methods:{
     getCode(){
@@ -35,7 +41,7 @@ export default {
       if (regex.test(this.form.phone)) {
         this.msgFlag = false
         //this.form.code = (Math.random()*1000000).toFixed(0)
-        return $axios({
+        return FrontRequst({
           'url': '/user/sendMsg',
           'method': 'post',
           data:{phone:this.form.phone}
@@ -58,10 +64,7 @@ export default {
         this.loading = false
         if(res.code === 1){
           sessionStorage.setItem("userPhone",this.form.phone)
-          alert("登录成功")
-          window.requestAnimationFrame(()=>{
-            window.location.href= '/front/index.html'
-          })
+          window.location.assign('http://localhost:8081/#/front/index');
         }else{
           this.$notify({ type:'warning', message:res.msg});
         }
