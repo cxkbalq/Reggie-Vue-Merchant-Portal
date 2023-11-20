@@ -22,6 +22,14 @@ instance.interceptors.request.use(
       //直接退出到登录面
       // window.location.assign('http://localhost:8081/login');
     }
+    const userInfo1 = JSON.parse(localStorage.getItem('user'));
+    if (userInfo1 && userInfo1.id) {
+      console.log(userInfo1.id);
+      config.headers['user'] = userInfo1.id;
+    }else {
+      //直接退出到登录面
+      // window.location.assign('http://localhost:8081/login');
+    }
     // 在这里可以进行一些请求前的操作
     let a=store.state.obj.loading
     console.log(a)

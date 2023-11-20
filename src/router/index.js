@@ -15,6 +15,12 @@ import ComboAdd from "@/views/backend/combo/Add.vue";
 import Gaode from "@/views/GaoDe.vue";
 import FrontLogin from "@/views/fonts/login.vue"
 import FrontIndex from "@/views/fonts/Index.vue"
+import AddOrder from "@/views/fonts/add-order.vue"
+import AddressFonts from "@/views/fonts/address.vue";
+import AddressEdit from "@/views/fonts/address-edit.vue";
+import UserFront from "@/views/fonts/User.vue";
+import paySuccess from "@/views/fonts/pay-success.vue";
+import FrontOrder from "@/views/fonts/order.vue";
 // 注册路由
 Vue.use(VueRouter)
 const router =new VueRouter({
@@ -37,6 +43,12 @@ const router =new VueRouter({
     //这些是用户端
     {path: '/front/login', component:FrontLogin},
     {path: '/front/index', component:FrontIndex},
+    {path: '/front/addorder', component:AddOrder},
+    {path: '/front/page/address', component:AddressFonts},
+    {path: '/front/page/address-edit', component:AddressEdit},
+    {path: '/front/page/user', component:UserFront},
+    {path: '/front/page/paysuccess', component:paySuccess},
+    {path: '/front/page/order', component:FrontOrder},
  ]
 })
 //全局守卫拦截器

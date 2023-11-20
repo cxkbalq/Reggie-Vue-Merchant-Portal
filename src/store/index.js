@@ -14,7 +14,7 @@ export default new Vuex.Store({
     },
     //这个是用户手机端的数据
     ObjPhone:{
-
+     id:0
     }
 
   },
@@ -32,7 +32,10 @@ export default new Vuex.Store({
     },
     updateloading(sta,t){
       sta.obj.loading=t
-    }
+    },
+    updateAddressid(sta,t){
+      sta.ObjPhone.id=t
+    },
   },
   actions: {
   },

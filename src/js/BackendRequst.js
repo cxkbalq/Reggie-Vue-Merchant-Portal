@@ -51,7 +51,7 @@ instance.interceptors.response.use(
         })
       // 添加延迟 2秒后执行的操作,优化用户体验
       setTimeout(() => {
-        window.location.assign('http://localhost:8081/login');
+        window.location.assign('http://localhost:8081/#/login');
       }, 1000);
       return response.data;
     } else {

@@ -543,13 +543,13 @@ export default {
     toAddOrderPage(){
       if(this.cartData.length > 0){
         window.requestAnimationFrame(()=>{
-          window.location.href ='/front/page/add-order.html'
+          window.location.href ='#/front/addorder'
         })
       }
     },
     toUserPage(){
       window.requestAnimationFrame(()=>{
-        window.location.href= '/front/page/user.html'
+        window.location.href= '#/front/page/user'
       })
     },
     async dishDetails(item){

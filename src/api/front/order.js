@@ -1,6 +1,8 @@
+import FrontRequst from "@/js/FrontRequst";
+
 //提交订单
-function  addOrderApi(data){
-    return $axios({
+export function  addOrderApi(data){
+    return FrontRequst({
         'url': '/order/submit',
         'method': 'post',
         data
@@ -8,16 +10,16 @@ function  addOrderApi(data){
 }
 
 //查询所有订单
-function orderListApi() {
-  return $axios({
+export function orderListApi() {
+  return FrontRequst({
     'url': '/order/list',
     'method': 'get',
   })
 }
 
 //分页查询订单
-function orderPagingApi(data) {
-  return $axios({
+export function orderPagingApi(data) {
+  return FrontRequst({
       'url': '/order/userPage',
       'method': 'get',
       params:{...data}
@@ -25,8 +27,8 @@ function orderPagingApi(data) {
 }
 
 //再来一单
-function orderAgainApi(data) {
-  return $axios({
+export function orderAgainApi(data) {
+  return FrontRequst({
       'url': '/order/again',
       'method': 'post',
       data

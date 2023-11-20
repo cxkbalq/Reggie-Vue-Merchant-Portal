@@ -64,7 +64,8 @@ export default {
         this.loading = false
         if(res.code === 1){
           sessionStorage.setItem("userPhone",this.form.phone)
-          window.location.assign('http://localhost:8081/#/front/index');
+          localStorage.setItem("user",JSON.stringify(res.data))
+          window.location.assign('#/front/index');
         }else{
           this.$notify({ type:'warning', message:res.msg});
         }
