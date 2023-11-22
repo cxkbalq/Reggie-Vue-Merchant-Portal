@@ -111,6 +111,7 @@
 
 <script>
 import {editOrderDetail,getOrderDetailPage,queryOrderDetailById} from '@/api/backend/order'
+import {rootpanduan} from "@/api/utils";
 export default {
   name: 'OrderIndex',
   data() {
@@ -191,6 +192,9 @@ export default {
     },
     // 取消，派送，完成
     cancelOrDeliveryOrComplete (status, id) {
+      if (rootpanduan()) {
+        return;
+      }
       this.$confirm('确认更改该订单状态?', '提示', {
         'confirmButtonText': '确定',
         'cancelButtonText': '取消',

@@ -195,6 +195,7 @@
 <script>
 import {addSetmeal, editSetmeal, querySetmealById,getCategoryList} from "@/api/backend/combo"
 import {queryDishList} from "@/api/backend/food";
+import {rootpanduan} from "@/api/utils";
 export default {
   name: "ComboAdd",
   data() {
@@ -349,6 +350,9 @@ export default {
 
     // 保存添加菜品列表
     addTableList() {
+      if (rootpanduan()) {
+        return;
+      }
       this.dishTable = JSON.parse(JSON.stringify(this.checkList))
       this.dishTable.forEach((n) => {
         n.copies = 1

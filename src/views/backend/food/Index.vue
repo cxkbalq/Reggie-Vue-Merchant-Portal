@@ -123,6 +123,7 @@
 </template>
 <script>
 import {getDishPage,dishStatusByStatus,deleteDish,editDish,addDish,queryDishList, commonDownload,queryDishById} from "@/api/backend/food"
+import {rootpanduan} from "@/api/utils";
 export default {
   name: "FoodIndex",
   data() {
@@ -167,6 +168,9 @@ export default {
     },
     // 添加
     addFoodtype (st) {
+      if (rootpanduan()) {
+        return;
+      }
       if (st === 'add'){
         //跳转添加页面
         this.$store.commit("updateflag",2)
@@ -184,6 +188,9 @@ export default {
 
     // 删除
     deleteHandle (type, id) {
+      if (rootpanduan()) {
+        return;
+      }
       if (type === '批量' && id === null) {
         if (this.checkList.length === 0) {
           return this.$message.error('请选择删除对象')
@@ -208,6 +215,9 @@ export default {
 
     //状态更改
     statusHandle (row) {
+      if (rootpanduan()) {
+        return;
+      }
       let params = {}
       if (typeof row === 'string' ) {
         if (this.checkList.length === 0) {
@@ -242,6 +252,9 @@ export default {
 
     // 全部操作
     handleSelectionChange (val){
+      if (rootpanduan()) {
+        return;
+      }
       let checkArr = []
       val.forEach((n) => {
         checkArr.push(n.id)

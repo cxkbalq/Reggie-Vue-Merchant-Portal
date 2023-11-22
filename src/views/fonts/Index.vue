@@ -2,13 +2,15 @@
 <template>
   <div id="main" class="app">
     <div class="divHead">
-      <img src="@/images/front/user.png" @click="toUserPage"/>
+      <img src="@/images/front/home.png" @click="toUserPage"/>
     </div>
     <div class="divTitle">
       <div class="divStatic">
-        <img src="@/images/front/logo.png"  class="logo1"/>
+<!--        <img src="@/images/front/logo.png"  class="logo1"/>-->
+        <img :src="imgPathConvert(item.image)"  class="logo1"/>
+
         <div class="divDesc">
-          <div class="divName">菩提阁餐厅</div>
+          <div class="divName">{{item.name}}</div>
           <div class="divSend">
             <span><img src="@/images/front/time.png"/> 距离1.5km</span>
             <span><img src="@/images/front/money.png"/> 配送费6元</span>
@@ -17,7 +19,8 @@
         </div>
       </div>
       <div class="divDesc">
-        简介: 菩提阁中餐厅是菩提阁点餐的独立的品牌，定位“大众 化的美食外送餐饮”，旨为顾客打造专业美食。
+        {{item.jianjie}}
+<!--        简介: 菩提阁中餐厅是菩提阁点餐的独立的品牌，定位“大众 化的美食外送餐饮”，旨为顾客打造专业美食。-->
       </div>
     </div>
     <div class="divBody">
@@ -203,6 +206,7 @@
 <script>
 import setRem from "@/js/base";
 import {addCartApi,categoryListApi,dishListApi,cartListApi,clearCartApi,setMealDishDetailsApi,setmealListApi,updateCartApi} from "@/api/front/main"
+import {imgPath} from "@/api/front/common";
 export default {
   name: "FontsIndex",
   data(){
@@ -230,6 +234,7 @@ export default {
         show:false,
         item:{}
       },
+      item:{}
     }
   },
   computed:{
@@ -254,6 +259,7 @@ export default {
   },
   created(){
     setRem(document, window);
+    this.item=this.$route.query.item
   },
   watch:{
     'dialogFlavor.show'(flag){
@@ -302,6 +308,10 @@ export default {
       }else{
         this.getSetmealData()
       }
+    },
+    //网络图片路径转换
+    imgPathConvert(path){
+      return imgPath(path)
     },
     //获取菜品数据
     async getDishList(){
@@ -535,10 +545,6 @@ export default {
       }
 
     },
-    //网络图片路径转换
-    imgPathConvert(path){
-      return `http://127.0.0.1:8080/common/download?name=${path}`
-    },
     //跳转到去结算界面
     toAddOrderPage(){
       if(this.cartData.length > 0){
@@ -549,7 +555,7 @@ export default {
     },
     toUserPage(){
       window.requestAnimationFrame(()=>{
-        window.location.href= '#/front/page/user'
+        window.location.href= '#/front/page/mendian'
       })
     },
     async dishDetails(item){

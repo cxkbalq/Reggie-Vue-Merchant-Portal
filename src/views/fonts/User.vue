@@ -16,13 +16,13 @@
       <div class="divLinks">
         <div class="item" @click="toAddressPage">
           <img src="@/images/front/locations.png"/>
-          <span>地址管理</span>
+          <span style="font-size: 15px">地址管理</span>
           <i class="el-icon-arrow-right"></i>
         </div>
         <div class="divSplit"></div>
         <div class="item" @click="toOrderPage">
           <img src="@/images/front/orders.png"/>
-          <span>历史订单</span>
+          <span style="font-size: 15px">历史订单</span>
           <i class="el-icon-arrow-right"></i>
         </div>
       </div>
@@ -50,6 +50,10 @@
       <div class="quitLogin" @click="toPageLogin">
         退出登录
       </div>
+      <van-tabbar v-model="active">
+        <van-tabbar-item icon="home-o" @click="qh(2)">首页</van-tabbar-item>
+        <van-tabbar-item icon="contact-o" @click="qh(1)">个人中心</van-tabbar-item>
+      </van-tabbar>
     </div>
   </div>
 </template>
@@ -78,6 +82,7 @@ export default {
         amount:undefined,//实收金额
         sumNum:0,//菜品总数
       }],
+      active:1
     }
   },
   computed:{},
@@ -158,11 +163,27 @@ export default {
     async toPageLogin(){
       const res = await loginoutApi()
       if(res.code === 1){
+        localStorage.removeItem("userInfo")
+        localStorage.removeItem("dengliObj1")
+        this.$notify({ type:'success', message:"用户退出成功"});
         window.requestAnimationFrame(()=>{
-          window.location.href = '#/front/page/login'
+          window.location.href = '#/front/login'
         })
       }else{
         this.$notify({ type:'warning', message:res.msg});
+      }
+    },
+    //页面切换
+    qh(t){
+      if(t===1){
+        window.requestAnimationFrame(()=>{
+          window.location.href='#/front/page/user'
+        })
+      }else {
+        window.requestAnimationFrame(()=>{
+          window.location.href='#/front/page/mendian'
+        })
+
       }
     }
   }
@@ -173,4 +194,7 @@ export default {
 
 <style scoped lang="less">
 @import "@/styles/front/user.css";
+#dizhi{
+  font-size: 16px; /* 设置字体大小为16像素 */
+}
 </style>

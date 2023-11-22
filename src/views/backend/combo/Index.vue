@@ -129,6 +129,7 @@
 
 <script>
 import { getSetmealPage, deleteSetmeal, setmealStatusByStatus,addSetmeal,editSetmeal,querySetmealById} from '@/api/backend/combo';
+import {rootpanduan} from "@/api/utils";
 
 export default {
   name: 'ComboIndex',
@@ -173,6 +174,9 @@ export default {
     },
     //添加套餐
     addSetMeal(st) {
+      if (rootpanduan()) {
+        return;
+      }
       if (st === 'add'){
         //跳转添加页面
         this.$store.commit("updateflag",2)
@@ -188,6 +192,9 @@ export default {
       }
     },
     deleteHandle(type, id) {
+      if (rootpanduan()) {
+        return;
+      }
       if (type === '批量' && id === null) {
         if (this.checkList.length === 0) {
           return this.$message.error('请选择删除对象');
@@ -214,6 +221,9 @@ export default {
         .catch(() => {});
     },
     statusHandle(row) {
+      if (rootpanduan()) {
+        return;
+      }
       let params = {};
       if (typeof row === 'string') {
         if (this.checkList.length == 0) {
@@ -248,6 +258,9 @@ export default {
         .catch(() => {});
     },
     handleSelectionChange(val) {
+      if (rootpanduan()) {
+        return;
+      }
       let checkArr = [];
       val.forEach((n) => {
         checkArr.push(n.id);

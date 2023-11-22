@@ -9,7 +9,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-
     const jwtToken = localStorage.getItem('dengliObj');
     // 在这里可以动态设置请求头部
     config.headers['jwtToken'] = jwtToken;

@@ -202,6 +202,7 @@
 
 <script>
 import {editDish, addDish, queryDishById, getCategoryList1} from "@/api/backend/food"
+import {rootpanduan} from "@/api/utils";
 export default {
   name: "FoodAdd",
   data() {
@@ -285,6 +286,9 @@ export default {
   },
   methods: {
     async init () {
+      if (rootpanduan()) {
+        return;
+      }
       queryDishById(this.id).then(res => {
         if (String(res.code) === '1') {
           this.ruleForm = { ...res.data }
@@ -338,8 +342,6 @@ export default {
 
     // 获取菜品分类
     getDishList () {
-
-
       getCategoryList1({ 'type': 1 }).then(res => {
         if (res.code === 1) {
           this.dishList = res.data
@@ -441,6 +443,9 @@ export default {
           } else {
             delete params.updateTime
             editDish(params).then(res => {
+              if (rootpanduan()) {
+                return;
+              }
               if (res.code === 1) {
                 this.$message.success('菜品修改成功！')
                 this.goBack()

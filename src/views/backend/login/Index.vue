@@ -30,6 +30,7 @@
 </template>
 <script>
 import {loginApi} from "@/api/backend/login";
+import {Notify} from "vant";
 // import {PathRoute} from "@/utils/pathpush"
 export default {
   name: 'LoginIndex',
@@ -76,7 +77,19 @@ export default {
             //将后端储存的jwt令牌进行本地储存
             localStorage.setItem('dengliObj', JSON.stringify(res.msg))
             localStorage.setItem('userInfo',JSON.stringify(res.data))
-            this.$message.success("欢迎用户："+res.data.username)
+            console.log(res.data.root)
+            switch (res.data.root) {
+              case 1:
+                this.$message.success("欢迎root用户："+res.data.username);
+                break;
+              case 2:
+                this.$message.success("欢迎管理用户："+res.data.username);
+                break;
+              default:
+                this.$message.success("欢迎普通用户："+res.data.username)
+                break;
+            }
+
             console.log(JSON.stringify(res))
             await this.$router.push('/backend')
             // PathRoute("/")

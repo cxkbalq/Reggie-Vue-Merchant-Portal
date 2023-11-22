@@ -10,6 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    //判断当前是否点击了店面，如果是，那么添加一个请求头，告诉后端，无需登录的jwt验证，直接放行
     const jwtToken = localStorage.getItem('dengliObj');
     // 在这里可以动态设置请求头部
     config.headers['jwtToken'] = jwtToken;
@@ -18,17 +19,12 @@ instance.interceptors.request.use(
     if (userInfo && userInfo.id) {
       console.log(userInfo.id);
       config.headers['employee'] = userInfo.id;
-    }else {
-      //直接退出到登录面
-      // window.location.assign('http://localhost:8081/login');
     }
+    //解决第一次登录没有本地储存发送的id读取错误
     const userInfo1 = JSON.parse(localStorage.getItem('user'));
     if (userInfo1 && userInfo1.id) {
       console.log(userInfo1.id);
       config.headers['user'] = userInfo1.id;
-    }else {
-      //直接退出到登录面
-      // window.location.assign('http://localhost:8081/login');
     }
     // 在这里可以进行一些请求前的操作
     let a=store.state.obj.loading

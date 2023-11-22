@@ -27,7 +27,7 @@
         :data="tableData"
         stripe
         class="tableBox"
-        v-loading=this.$store.state.obj.loading
+        v-loading="this.$store.state.obj.loading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
       >
@@ -88,103 +88,116 @@
     </div>
   </div>
 </template>
+
 <script>
-import {getMemberList ,enableOrDisableEmployee} from "@/api/backend/member"
-import { Loading } from 'element-ui';
+import { getMemberList, enableOrDisableEmployee } from "@/api/backend/member";
+import { Loading } from "element-ui";
+
 export default {
   name: "MenberMain",
   data() {
     return {
-      input: '',
+      input: "",
       counts: 0,
       page: 1,
       pageSize: 10,
-      tableData : [],
-      id : '',
-      status : '',
-    }
+      tableData: [],
+      id: "",
+      status: "",
+    };
   },
   computed: {},
   created() {
-    this.init()
-    this.user = JSON.parse(localStorage.getItem('userInfo')).username
+    this.init();
+    this.user = JSON.parse(localStorage.getItem('userInfo')).username;
   },
   mounted() {
   },
   methods: {
-    async init () {
+    async init() {
       const params = {
         page: this.page,
         pageSize: this.pageSize,
         name: this.input ? this.input : undefined
-      }
-      await getMemberList(params).then(res => {
-        if (String(res.code) === '1') {
-          this.tableData = res.data.records || []
-          this.counts = res.data.total
-        }
-      }).catch(err => {
-        this.$message.error('请求出错了：' + err)
-      })
+      };
+
+      await getMemberList(params)
+        .then((res) => {
+          if (String(res.code) === '1') {
+            this.tableData = res.data.records || [];
+            this.counts = res.data.total;
+          }
+        })
+        .catch((err) => {
+          this.$message.error('请求出错了：' + err);
+        });
     },
-    //刷新页面
     handleQuery() {
       this.page = 1;
       this.init();
     },
-    // 添加
-    addMemberHandle (st) {
-      console.log(st)
+    addMemberHandle(st) {
+      if (this.rootpanduan()) {
+        return;
+      }
       if (st === 'add'){
-        //跳转添加页面
-        this.$store.commit("updateflag",2)
-        console.log("状态为")
-        this.$store.commit("update","MemberAdd")
+        this.$store.commit('updateflag', 2);
+        this.$store.commit('update', 'MemberAdd');
       } else {
-        //跳转修改页面
-        //在store里设置需要更改的id
-        this.$store.commit("updateid",st)
-        console.log(this.$store.state.obj.pathid)
-        this.$store.commit("update","MemberAdd")
+        this.$store.commit('updateid', st);
+        this.$store.commit('update', 'MemberAdd');
       }
     },
-    //状态修改
-    statusHandle (row) {
-      this.id = row.id
-      this.status = row.status
+    statusHandle(row) {
+      if (this.rootpanduan()) {
+        return;
+      }
+      this.id = row.id;
+      this.status = row.status;
       this.$confirm('确认调整该账号的状态?', '提示', {
         'confirmButtonText': '确定',
         'cancelButtonText': '取消',
         'type': 'warning'
       }).then(() => {
-        enableOrDisableEmployee({ 'id': this.id, 'status': !this.status ? 1 : 0 }).then(res => {
-          console.log('enableOrDisableEmployee',res)
-          if (String(res.code) === '1') {
-            this.$message.success('账号状态更改成功！')
-            this.handleQuery()
-          }
-        }).catch(err => {
-          this.$message.error('请求出错了：' + err)
-        })
-      })
+        enableOrDisableEmployee({ 'id': this.id, 'status': !this.status ? 1 : 0 })
+          .then(res => {
+            if (String(res.code) === '1') {
+              this.$message.success('账号状态更改成功！');
+              this.handleQuery();
+            }
+          })
+          .catch(err => {
+            this.$message.error('请求出错了：' + err);
+          });
+      });
     },
-    handleSizeChange (val) {
-      this.pageSize = val
-      this.init()
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.init();
     },
-// 处理当前页码变化的函数
-    handleCurrentChange (val) {
-      // 将当前页码赋值给变量val
-      this.page = val
-      // 调用init()函数进行初始化操作
-      this.init()
+    handleCurrentChange(val) {
+      this.page = val;
+      this.init();
+    },
+    rootpanduan() {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (userInfo?.root == 3 || userInfo?.root == 3) {
+        this.$message({
+          message: '你的权限不足，无法进行操作',
+          type: 'error',
+          duration: 5 * 1000,
+        });
+        return true;
+      }
+      return false;
     }
   }
-}
+};
 </script>
+
 <style lang="css">
 @import "@/styles/backend/page.css";
-#member-app  .notAdmin::after{
+#member-app .notAdmin::after {
   border: 0 !important;
 }
 </style>

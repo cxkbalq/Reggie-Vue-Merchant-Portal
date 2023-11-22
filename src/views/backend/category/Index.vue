@@ -133,6 +133,7 @@
 </template>
 <script>
 import {addCategory,deleCategory,editCategory,getCategoryPage,queryCategoryById} from "@/api/backend/category"
+import {rootpanduan} from "@/api/utils";
 export default {
   name: 'CategoryIndex',
   data() {
@@ -177,6 +178,9 @@ export default {
     },
     // 添加
     addClass(st) {
+      if (rootpanduan()) {
+        return;
+      }
       if (st == 'class') {
         this.classData.title = '新增菜品分类'
         this.type = '1'
@@ -203,6 +207,9 @@ export default {
     },
     //删除
     deleteHandle(id) {
+      if (rootpanduan()) {
+        return;
+      }
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         'confirmButtonText': '确定',
         'cancelButtonText': '取消',
@@ -224,6 +231,9 @@ export default {
     },
     //数据提交
     submitForm(st) {
+      if (rootpanduan()) {
+        return;
+      }
       const classData = this.classData
       const valid = (classData.name === 0 ||classData.name)  && (classData.sort === 0 || classData.sort)
       if (this.action === 'add') {

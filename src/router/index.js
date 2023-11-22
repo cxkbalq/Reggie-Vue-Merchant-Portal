@@ -21,6 +21,10 @@ import AddressEdit from "@/views/fonts/address-edit.vue";
 import UserFront from "@/views/fonts/User.vue";
 import paySuccess from "@/views/fonts/pay-success.vue";
 import FrontOrder from "@/views/fonts/order.vue";
+import mendainView from "@/views/fonts/mendian.vue";
+import Search from "@/views/fonts/search/index.vue";
+import SearchList from "@/views/fonts/search/list.vue";
+import FrontHome from "@/views/fonts/home.vue";
 // 注册路由
 Vue.use(VueRouter)
 const router =new VueRouter({
@@ -49,6 +53,10 @@ const router =new VueRouter({
     {path: '/front/page/user', component:UserFront},
     {path: '/front/page/paysuccess', component:paySuccess},
     {path: '/front/page/order', component:FrontOrder},
+    {path: '/front/page/mendian', component:mendainView},
+    {path: '/front/search', component:Search},
+    {path: '/front/searchlist', component:SearchList},
+    {path: '/front/home', component:FrontHome},
  ]
 })
 //全局守卫拦截器

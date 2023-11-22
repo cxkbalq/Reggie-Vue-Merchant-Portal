@@ -30,6 +30,7 @@
               </el-form-item>
               <el-form-item label="创建人:">
                 <span>{{ props.row.createUser }}</span>
+                <span>{{ props.row.createUser }}</span>
               </el-form-item>
               <el-form-item label="负责人电话:">
                 <span>{{ props.row.suphone }}</span>

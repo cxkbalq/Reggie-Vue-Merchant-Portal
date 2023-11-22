@@ -16,6 +16,7 @@
 import setRem from "@/js/base";
 import {loginoutApi,loginApi,sendMsgApi} from "@/api/front/login";
 import FrontRequst from "@/js/FrontRequst";
+import {Notify} from "vant";
 
 export default {
   name: "FrontLogin",
@@ -65,9 +66,14 @@ export default {
         if(res.code === 1){
           sessionStorage.setItem("userPhone",this.form.phone)
           localStorage.setItem("user",JSON.stringify(res.data))
-          window.location.assign('#/front/index');
+          localStorage.setItem('dengliObj', JSON.stringify(res.msg))
+          this.$message({
+            message: '登录成功',
+            type: 'success'
+          });
+          window.location.assign('#/front/page/mendian');
         }else{
-          this.$notify({ type:'warning', message:res.msg});
+          this.$notify({ type:'warning', message:"验证码错误"});
         }
       }else{
         this.$notify({ type:'warning', message:'请输入手机号码'});

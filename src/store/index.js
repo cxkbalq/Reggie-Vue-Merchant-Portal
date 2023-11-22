@@ -15,7 +15,9 @@ export default new Vuex.Store({
     //这个是用户手机端的数据
     ObjPhone:{
      id:0
-    }
+    },
+    //用于手机端点击店铺，无需jwt校验
+    stater:0,
 
   },
   getters: {
@@ -35,6 +37,9 @@ export default new Vuex.Store({
     },
     updateAddressid(sta,t){
       sta.ObjPhone.id=t
+    },
+    updatestater(sta,t){
+      sta.stater=t
     },
   },
   actions: {
