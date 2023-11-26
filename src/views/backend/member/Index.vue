@@ -59,7 +59,7 @@
               size="small"
               class="blueBug"
               @click="addMemberHandle(scope.row.id)"
-              :class="{notAdmin:user !== 'admin'}"
+              :class="{notAdmin:userRoot <=2}"
             >
               编辑
             </el-button>
@@ -68,7 +68,7 @@
               size="small"
               class="delBut non"
               @click="statusHandle(scope.row)"
-              v-if="user === 'admin'"
+              v-if="userRoot <=2"
             >
               {{ scope.row.status == '1' ? '禁用' : '启用' }}
             </el-button>
@@ -109,7 +109,7 @@ export default {
   computed: {},
   created() {
     this.init();
-    this.user = JSON.parse(localStorage.getItem('userInfo')).username;
+    this.userRoot = JSON.parse(localStorage.getItem('userInfo')).root;
   },
   mounted() {
   },
@@ -164,6 +164,9 @@ export default {
             if (String(res.code) === '1') {
               this.$message.success('账号状态更改成功！');
               this.handleQuery();
+            }
+            else {
+              this.$message.warning(res.msg)
             }
           })
           .catch(err => {

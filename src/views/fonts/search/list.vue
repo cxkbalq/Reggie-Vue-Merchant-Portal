@@ -5,9 +5,9 @@
       readonly
       shape="round"
       background="#ffffff"
-      :value="searchNr"
+      :value="objlist.goodsName"
       show-action
-      @click="$router.push('/search')"
+      @click="$router.push('/front/search')"
     >
       <template #action>
         <van-icon class="tool" name="apps-o" />
@@ -23,15 +23,15 @@
 
     <div class="goods-list">
       <h5 v-if="list===null|| list.length === 0" id="xianshi">为查询到商品</h5>
-<!--      <GoodsItem v-else v-for="item in list" :key="item.imgUrl" :item="item"></GoodsItem>-->
+      <GoodsItem v-else v-for="item in list" :key="item.imgUrl" :item="item"></GoodsItem>
     </div>
   </div>
 </template>
 
 <script>
-// import GoodsItem from '@/components/GoodsItem.vue'
-// import { getproList } from '@/api/product'
+import GoodsItem from '@/components/GoodsItem.vue'
 import { Toast } from 'vant';
+import {getmendiansearch} from "@/api/front/mendian";
 export default {
   name: 'SearchList',
   data(){
@@ -47,20 +47,27 @@ export default {
     }
   },
   async created () {
-    if(!this.objlist.goodsName&&!this.$route.query.categoryId){
+    if(!this.objlist.goodsName){
       Toast("抱歉未搜索到商品")
     }else {
-      this.objlist.categoryId= this.$route.query.categoryId
-      // if(!this.objlist.categoryId){
-      //
-      // }
-      var res=  await getproList(this.objlist)
-      this.list=res.data.list.data
+      const params = {
+        name: this.objlist.goodsName
+      };
+      var res=  await getmendiansearch(params).then(res=>{
+        if (String(res.code) === '1') {
+          this.list=res.data
+        }else {
+          Toast(res.msg)
+        }
+      }).catch(err => {
+        Toast('请求出错了：' + err)
+      })
+
     }
     this.proList = list.data
   },
   components: {
-    // GoodsItem
+    GoodsItem
   },
   methods:{
     async  xianshi(sz){

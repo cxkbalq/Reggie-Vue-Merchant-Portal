@@ -21,16 +21,23 @@
             />
           </el-form-item>
           <el-form-item
-            label="更换负责人:"
-            prop="superson"
+            label="更换/添加负责人:"
+            prop="supermd"
           >
             <el-select
-              v-model="ruleForm.superson"
-              placeholder="请选择新的负责人分类"
+              v-model="ruleForm.supermd"
+              placeholder="请选择新的负责人"
             >
-              <el-option v-for="(item,index) in supersonList" :key="index" :label="item.name" :value="item.id"/>
+              <el-option
+                v-for="(item, index) in supermdList"
+                :key="index"
+                :label="item.name + '-------------------所属门店id：' + item.mendianId"
+                :value="item.id"
+                :style="{ color: item.root === 2 ? 'rgba(10,255,2,0.27)' : '' }"
+              />
             </el-select>
           </el-form-item>
+
         </div>
         <div>
           <el-form-item
@@ -42,32 +49,6 @@
               placeholder="请填写新的地址"
             />
           </el-form-item>
-
-          <el-form-item
-            label="更换父门店:"
-            prop="supermd"
-          >
-            <el-select
-              v-model="ruleForm.supermd"
-              placeholder="请选择新的父门店"
-            >
-              <el-option v-for="(item,index) in supermdList" :key="index" :label="item.name" :value="item.id"/>
-            </el-select>
-          </el-form-item>
-          <br>
-
-
-          <el-form-item
-            label="修改联系电话:"
-            prop="suphone"
-          >
-            <el-input
-              v-model="ruleForm.suphone"
-              placeholder="请填写新的电话号码"
-            />
-          </el-form-item>
-
-
           <el-form-item
             label="修改状态:"
             prop="statusTest"
@@ -77,6 +58,8 @@
               <el-radio label="下线"></el-radio>
             </el-radio-group>
           </el-form-item>
+          <br>
+
 
         </div>
         <div>
@@ -96,8 +79,8 @@
               ref="upload"
             >
               <img
-                v-if="ruleForm.image"
-                :src="getImage(ruleForm.image)"
+                v-if="imageUrl"
+                :src="imageUrl"
                 class="avatar"
               >
               <i
@@ -110,10 +93,10 @@
         <div class="address">
           <el-form-item
             label="门店描述:"
-            prop="description"
+            prop="jianjie"
           >
             <el-input
-              v-model="ruleForm.description"
+              v-model="ruleForm.jianjie"
               type="textarea"
               :rows="3"
               placeholder="门店描述，最长200字"
@@ -128,7 +111,7 @@
             </el-button>
             <el-button
               type="primary"
-              @click="submitForm('ruleForm')"
+              @click="submitForm(ruleForm)"
             >
               保存
             </el-button>
@@ -136,7 +119,7 @@
               v-if="actionType == 'add'"
               type="primary"
               class="continue"
-              @click="submitForm('ruleForm','goAnd')"
+              @click="submitForm(ruleForm,1)"
             >
               保存并继续添加菜品
             </el-button>
@@ -147,7 +130,7 @@
   </div>
 </template>
 <script>
-import {querymendianById, querysupersonList} from "@/api/backend/mendian";
+import {querymendianById, querysupersonList, savemendian,update} from "@/api/backend/mendian";
 import {getCategoryList} from "@/api/backend/combo";
 import {addDish, editDish} from "@/api/backend/food";
 
@@ -163,25 +146,20 @@ export default {
       actionType: '',
       vueRest: '1',
       index: 0,
-      supersonList: [{name: 'ddwd', id: '1'}, {name: 'ddw2e22ed', id: '4'}],
-      supermdList: [{name: 'ddwd', id: '1'}, {name: 'ddw2e22ed', id: '4'}],
+      supersonList: [],
+      supermdList: [],
       inputStyle: {'flex': 1},
-      statusTest:'下线',
+      statusTest:'上线',
       ruleForm: {
         id: '',
         name: '',
-        category: '',
         address: '',
-        status: '',
+        stastus: '1',
         todaymony: '',
         allmony: '',
-        superson: '',
-        supermd: '',
         crateuser: '',
-        suphone: '',
         image: '',
-        description: '',
-        supenmd: ''
+        jianjie: '',
       },
       mak: false
     }
@@ -223,9 +201,11 @@ export default {
   },
   created() {
     this.id = this.$store.state.obj.pathid
-    this.getsupersonList()
-    this.actionType = this.id ? 'edit' : 'add'
-    if (this.id) {
+    if(this.id===0){
+      this.actionType='add'
+    }else {
+      this.actionType = 'edit'
+      this.getsupersonList()
       this.init()
     }
   },
@@ -237,49 +217,17 @@ export default {
         console.log(res)
         if (String(res.code) === '1') {
           this.ruleForm = {...res.data}
-          this.ruleForm.price = String(res.data.price / 100)
           this.ruleForm.status = res.data.status == '1'
-          this.dishFlavors = res.data.flavors && res.data.flavors.map(obj => ({
-            ...obj,
-            value: JSON.parse(obj.value),
-            showOption: false
-          }))
-          console.log('this.dishFlavors', this.dishFlavors)
-          // this.ruleForm.id = res.data.data.categoryId
-          // this.imageUrl = res.data.data.image
+          if(res.data.stastus===1){
+            this.statusTest="上线"
+          }else {
+            this.statusTest="下线"
+          }
           this.imageUrl = `/common/download?name=${res.data.image}`
         } else {
           this.$message.error(res.msg || '操作失败')
         }
       })
-    },
-
-    // 获取菜品分类
-    getDishList() {
-      getCategoryList({'type': 1}).then(res => {
-        if (res.code === 1) {
-          this.dishList = res.data
-        } else {
-          this.$message.error(res.msg || '操作失败')
-        }
-      })
-    },
-    outSelect(st, index) {
-      const _this = this
-      setTimeout(() => {
-        const obj = JSON.parse(JSON.stringify(_this.dishFlavors[index]))
-        obj.showOption = st
-        _this.dishFlavors.splice(index, 1, obj)
-      }, 200)
-    },
-
-    inputHandle(val, index) {
-      // this.selectFlavor(false,index)
-    },
-
-    checkOption(val, ind, index) {
-      this.selectHandle(val.name, index, ind)
-      this.dishFlavors[index].name = val.name
     },
 
     selectHandle(val, key, ind) {
@@ -288,66 +236,47 @@ export default {
       this.dishFlavors = arrDate
     },
 
-    submitForm(formName, st) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let params = {...this.ruleForm}
-          // params.flavors = this.dishFlavors
-          params.status = this.ruleForm ? 1 : 0
-          params.price *= 100
-          params.categoryId = this.ruleForm.categoryId
-          params.flavors = this.dishFlavors.map(obj => ({...obj, value: JSON.stringify(obj.value)}))
-          delete params.dishFlavors
-          if (!this.imageUrl) {
-            this.$message.error('请上传菜品图片')
-            return
-          }
-          if (this.actionType == 'add') {
-            delete params.id
-            addDish(params).then(res => {
-              if (res.code === 1) {
-                this.$message.success('菜品添加成功！')
-                if (!st) {
-                  this.goBack()
-                } else {
-                  this.dishFlavors = []
-                  // this.dishFlavorsData = []
-                  this.imageUrl = ''
-                  this.ruleForm = {
-                    'name': '',
-                    'id': '',
-                    'price': '',
-                    'code': '',
-                    'image': '',
-                    'description': '',
-                    'dishFlavors': [],
-                    'status': true,
-                    categoryId: ''
-                  }
-                }
-              } else {
-                this.$message.error(res.msg || '操作失败')
-              }
-            }).catch(err => {
-              this.$message.error('请求出错了：' + err)
-            })
+    async  submitForm(formName,st) {
+      if(!this.Rules(formName)){
+        return;
+      }
+      //更新操作
+      if(this.actionType == 'edit'){
+        formName.supersonId=formName.supermd
+        await update(formName).then(res=>{
+          if (String(res.code) === '1') {
+            this.$message.success(res.msg||"数据更新成功")
+            this.$store.commit("update","MendainIndex")
           } else {
-            delete params.updateTime
-            editDish(params).then(res => {
-              if (res.code === 1) {
-                this.$message.success('菜品修改成功！')
-                this.goBack()
-              } else {
-                this.$message.error(res.msg || '操作失败')
-              }
-            }).catch(err => {
-              this.$message.error('请求出错了：' + err)
-            })
+            this.$message.error(res.msg || '操作失败')
           }
-        } else {
-          return false
+        }).catch(err=>{
+          this.$message.error(res.msg+err || '操作失败')
+        })
+      }
+      //添加操作
+      else {
+        if(st===1){
+          await savemendian(formName).then(res=>{
+            if (String(res.code) === '1') {
+              this.$message.success(res.msg||"添加成功")
+            } else {
+              this.$message.error(res.msg || '操作失败')
+            }
+          })
+          this.supermdList=[]
+        }else {
+          await savemendian(formName).then(res=>{
+            if (String(res.code) === '1') {
+              this.$message.success(res.msg||"添加成功")
+              this.$store.commit("update","MendainIndex")
+            } else {
+              this.$message.error(res.msg || '操作失败')
+            }
+          })
         }
-      })
+      }
+
     },
 
     handleAvatarSuccess(response, file, fileList) {
@@ -378,11 +307,31 @@ export default {
     },
 
     goBack() {
-      this.$store.commit("update","MendianAdd")
+      this.$store.commit("update","MendainIndex")
     },
     //显示图片
     getImage(image) {
       return `/common/download?name=${image}`;
+    },
+    //验证表单是否满足条件，不为空
+    Rules(t){
+      if(t.image===''){
+        this.$message.error("你还未上传图片")
+        return false
+      }
+      if(t.length<3||t.length>=15){
+        this.$message.error("门店名称不合法")
+        return false
+      }
+      if(t.address.length<=3||t.address.length>=65){
+        this.$message.error("地址不合法")
+        return false
+      }
+      if(t.jianjie.length<=3||t.jianjie.length>=65){
+        this.$message.error("简介不合法")
+        return false
+      }
+      return true
     },
 
     // 获得门下所有员工
@@ -391,7 +340,9 @@ export default {
       //获得全部员工信息
       querysupersonList(this.id).then(res => {
         if (res.code === 1) {
-          this.supersonList = res.data
+          // this.supermdList = res.data
+          //去除权限等于1的
+          this.supermdList= res.data.filter(item => item.root !== 1);
         } else {
           this.$message.error(res.msg || '操作失败')
         }

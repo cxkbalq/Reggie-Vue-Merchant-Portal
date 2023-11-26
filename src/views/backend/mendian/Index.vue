@@ -1,20 +1,31 @@
 <template>
   <div class="addBrand-container" id="combo-add-app">
     <div class="container">
+      <el-input
+        v-model="input"
+        placeholder="请输入门店名称"
+        style="width: 250px"
+        clearable
+        @keyup.enter.native="handleQuery"
+      ></el-input>
+      <el-button
+        type="primary"
+        @click="addMemberHandle('add')"
+      >
+        + 创建门店
+      </el-button>
       <!-- 表格 -->
       <el-table :data="tableData" :key="generateKey" style="width: 100%"
                 v-loading=this.$store.state.obj.loading
                 element-loading-text="拼命加载中"
-                element-loading-spinner="el-icon-loading">
+                element-loading-spinner="el-icon-loading"
+                :row-class-name="customRowClassName">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
               <!-- 门店信息展开部分 -->
               <el-form-item label="门店名称:">
                 <span>{{ props.row.name }}</span>
-              </el-form-item>
-              <el-form-item label="所属父门店:">
-                <span>{{ props.row.supermd }}</span>
               </el-form-item>
               <el-form-item label="总营业额:">
                 <span>{{ props.row.allmony }}$</span>
@@ -28,12 +39,9 @@
               <el-form-item label="所属负责人:">
                 <span>{{ props.row.supersonId}}</span>
               </el-form-item>
-              <el-form-item label="创建人:">
+              <el-form-item label="创建人id:">
                 <span>{{ props.row.createUser }}</span>
-                <span>{{ props.row.createUser }}</span>
-              </el-form-item>
-              <el-form-item label="负责人电话:">
-                <span>{{ props.row.suphone }}</span>
+<!--                <span>{{ props.row.createUser }}</span>-->
               </el-form-item>
             </el-form>
           </template>
@@ -72,12 +80,24 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        class="pageList"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize"
+        :current-page.sync="page"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="counts"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      ></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import {querysupersonList,getmendianPage,enableOrDisableEmployee,querymendianById} from '@/api/backend/mendian'
+import {rootpanduan} from "@/api/utils";
+import Vue from "vue";
 export default {
   name: 'MendianIndex',
   data() {
@@ -105,6 +125,7 @@ export default {
       const params = {
         page: this.page,
         pageSize: this.pageSize,
+        name: this.input ? this.input : undefined
       }
       await getmendianPage(params).then(res => {
         if (String(res.code) === '1') {
@@ -116,6 +137,12 @@ export default {
       })
     },
     addMemberHandle (st) {
+      if (rootpanduan()) {
+        return;
+      }
+      if(this.PuanDuanRoot()){
+        return;
+      }
       if (st === 'add'){
         //跳转添加页面
         this.$store.commit("updateflag",2)
@@ -134,12 +161,22 @@ export default {
     getImage(image) {
       return `/common/download?name=${image}`;
     },
-
+    handleQuery() {
+      this.page = 1;
+      this.init();
+    },
+    customRowClassName({ row }) {
+      // 判断 name 是否为特定值，如果是，返回对应的类名，否则返回空字符串
+      return row.id === JSON.parse(localStorage.getItem("userInfo")).mendianId  ? 'special-row' : '';
+    },
     //门店状态更改
     statusHandle (row) {
+      if (rootpanduan()) {
+        return;
+      }
       this.id = row.id
       this.stastus = row.stastus
-      this.$confirm('确认调整该账号的状态?', '提示', {
+      this.$confirm('确认下线改门店?', '提示', {
         'confirmButtonText': '确定',
         'cancelButtonText': '取消',
         'type': 'warning'
@@ -149,13 +186,31 @@ export default {
           if (String(res.code) === '1') {
             this.$message.success('状态更改成功！')
             this.init()
+          }else {
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           this.$message.error('请求出错了：' + err)
           this.init()
         })
-      })
+      }).catch(action => {
+        this.$message.warning('你取消了操作')
+      });
+    },
+    //对于门店添加修改，只有root才可以，限制权限2
+    PuanDuanRoot(){
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (userInfo?.root == 2 || userInfo?.root == 2) {
+        Vue.prototype.$message({
+          message: '你的权限不足，无法进行操作',
+          type: 'error',
+          duration: 5 * 1000,
+        });
+        return true;
+      }
+      return false;
     }
+
   }
 }
 </script>
@@ -191,5 +246,8 @@ export default {
 
 .status-red {
   color: red;
+}
+::v-deep .special-row {
+  background-color: rgba(102, 102, 102, 0.27);
 }
 </style>

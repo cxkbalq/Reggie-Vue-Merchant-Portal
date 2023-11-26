@@ -26,11 +26,13 @@
         </el-form>
       </div>
     </div>
+<!--    这个是店面选择的弹窗-->
   </div>
 </template>
 <script>
 import {loginApi} from "@/api/backend/login";
 import {Notify} from "vant";
+import {querymendianById} from "@/api/backend/mendian";
 // import {PathRoute} from "@/utils/pathpush"
 export default {
   name: 'LoginIndex',
@@ -40,7 +42,15 @@ export default {
         username: 'admin',
         password: '123456'
       },
-      loading: false
+      loading: false,
+      mendianobj:{
+        id:0,
+        image:'',
+        name:''
+      },
+      //////////////////////////
+      outerVisible: false,
+      innerVisible: false
     }
   },
   computed: {
@@ -80,7 +90,10 @@ export default {
             console.log(res.data.root)
             switch (res.data.root) {
               case 1:
-                this.$message.success("欢迎root用户："+res.data.username);
+                //如何是root账户，需要进行门店的选择，让后端知道你需要操作哪一个店
+                // this.$message.success("你当前的权限为root权限，请选择需要查询的门店："+res.data.username);
+                this.$router.push("/select")
+                return;
                 break;
               case 2:
                 this.$message.success("欢迎管理用户："+res.data.username);
@@ -89,7 +102,6 @@ export default {
                 this.$message.success("欢迎普通用户："+res.data.username)
                 break;
             }
-
             console.log(JSON.stringify(res))
             await this.$router.push('/backend')
             // PathRoute("/")
@@ -99,7 +111,16 @@ export default {
           }
         }
       })
-    }
+    },
+    // 其他方法...
+    handleRegionConfirm() {
+      this.$message({
+        type: 'success',
+        message: `你选择了门店地区: ${this.form.region}`
+      });
+      this.dialogFormVisible = false;
+      // 这里可以根据选择的地区进行其他逻辑处理
+    },
   }
 }
 </script>

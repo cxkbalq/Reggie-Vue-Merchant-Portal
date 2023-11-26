@@ -6,8 +6,9 @@
       <div class="sidebar-container">
         <div class="logo">
           <!-- <img src="images/logo.png" width="122.5" alt="" /> -->
-          <img src="../../images/login/login-logo.png" alt="" style="width: 117px; height: 32px" />
-
+<!--          <img src="../../images/login/login-logo.png" alt="" style="width: 117px; height: 32px" />-->
+          <img :src="imgPathConvert($store.state.mendian.image)" alt="" style="width: 50px; height: 50px" />
+          <h5 style="color: white">{{$store.state.mendian.name}}</h5>
         </div>
         <div id="menu-item">
         <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -89,6 +90,8 @@ import MendianAdd from "@/views/backend/mendian/Add.vue";
 import OrderIndex from "@/views/backend/order/Index.vue";
 import MemberAdd from "@/views/backend/member/Add.vue";
 import ComboAdd from "@/views/backend/combo/Add.vue";
+import {imgPath} from "@/api/front/common";
+import {querymendianById} from "@/api/backend/mendian";
 
 export default {
   name: 'MainIndex',
@@ -119,9 +122,11 @@ export default {
     const userInfo = localStorage.getItem('userInfo')
     if (userInfo) {
       this.userInfo = JSON.parse(userInfo)
+      this.mendainInit()
     }else {
       this.$router.push('/login')
     }
+    this.$store.commit('update','MenberMain') ;
   },
   beforeDestroy() {
     this.timer = null
@@ -171,6 +176,20 @@ export default {
       localStorage.removeItem('userInfo')
       //只能这样使用，否则或出现依赖循环引入
       this.$router.push("/login")
+    },
+    //网络图片路径转换
+    imgPathConvert(path){
+      return imgPath(path)
+    },
+    async mendainInit(){
+      //发送请求，查询当前门店信息
+      let res=await querymendianById(JSON.parse(localStorage.getItem('userInfo')).mendianId)
+      if(String(res.code) === '1'){
+        this.$store.commit("updateMendian",res.data)
+      }else {
+        this.$message.error("后端发送错误，请联系后台工作人员")
+        return;
+      }
     }
   }
 }

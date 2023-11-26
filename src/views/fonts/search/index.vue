@@ -4,8 +4,7 @@
     <van-nav-bar title="搜索一下" left-arrow @click-left="$router.go(-1)" />
 
     <van-search show-action placeholder="请输入搜索关键词" clearable
-                v-model="serchsr"
-                @click="$router.push('/search')">
+                v-model="serchsr">
       <template #action>
         <div @click="gosearch(serchsr)">搜索</div>
       </template>
@@ -15,7 +14,7 @@
     <div class="search-history">
       <div class="title">
         <span>最近搜索</span>
-        <van-icon name="delete-o" size="16" />
+        <van-icon name="delete-o" size="16" @click="remf" />
       </div>
       <div class="list" >
         <div class="list-item" @click="gosearch(item)" v-for="(item,index) in serchlist" :key="index">
@@ -26,16 +25,17 @@
   </div>
 </template>
 <script>
-// import { getsearch,setsearch,remsearch } from '@/utils/storage'
 import router from '@/router'
 import { Toast } from 'vant';
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Search',
+
   data(){
     return{
-      serchlist:['菩提阁1','菩提阁2','菩提阁3','菩提阁4'],
-      serchsr:''
+      serchlist:[],
+      serchsr:'',
+      search:'search',
     }
   },
   methods:{
@@ -49,8 +49,8 @@ export default {
         this.serchlist.splice(number,1)
       }
       this.serchlist.unshift(sr)
-      remsearch()
-      setsearch(this.serchlist)
+      localStorage.removeItem(this.search)
+      localStorage.setItem(this.search,JSON.stringify(this.serchlist))
     },
     gosearch(sr){
       if(sr==''){
@@ -59,10 +59,16 @@ export default {
       }
       this.SerchUp(sr)
       //跳转连接
-      this.$router.push(`/searchlist?search=${sr}`)
+      this.$router.push(`/front/searchlist?search=${sr}`)
+    },
+    remf(){
+      localStorage.removeItem(this.search)
+      this.serchlist=[]
     }
   },created () {
-     // this.serchlist=getsearch()
+    const def=[]
+    const res=localStorage.getItem('search')
+    res? this.serchlist=JSON.parse(res):this.serchlist=[]
   }
 }
 </script>

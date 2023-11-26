@@ -1,10 +1,10 @@
 <template>
   <div id="order" class="app">
     <div class="divHead">
-      <div class="divTitle">
-        <i class="el-icon-arrow-left" @click="goBack"></i>菩提阁
-      </div>
+    <div class="divTitle">
+      <el-button type="primary" icon="el-icon-arrow-left" style="height: 30px" id="test" @click="goBack"></el-button>
     </div>
+  </div>
     <div class="divBody" v-if="orderList.length > 0">
       <van-list
         v-model="loading"
@@ -70,7 +70,7 @@ export default {
       //表示是从订单页面跳转过来的
       if(url.includes('success')){
         window.requestAnimationFrame(()=>{
-          window.location.href= '#/front/index'
+          window.location.href= '#/front/page/mendian'
         })
       }else{
         history.go(-1)
@@ -110,7 +110,7 @@ export default {
       const res = await orderAgainApi({id:order.id})
       if(res.code === 1){
         window.requestAnimationFrame(()=>{
-          window.location.href= '/front/index.html'
+          window.location.href= '#/front/page/mendian'
         })
       }else{
         this.$notify({ type:'warning', message:res.msg});
@@ -144,5 +144,17 @@ export default {
 
 
 <style scoped lang="less">
-
+@import "@/styles/front/address.css";
+.divTitle{
+  background-color: #5a5e66;
+  height: 40px;
+}
+#test{
+  width: 10px;
+  position: relative;
+  right: 200px;
+  background-color: #5a5e66;
+  border-radius: 0px;
+  border-color: #5a5e66;
+}
 </style>

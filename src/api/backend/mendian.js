@@ -24,10 +24,24 @@ export function querymendianById  (id) {
         method: 'get'
     })
 }
-//获得创建人下的所有员工信息
+//获得当前门店下的所有员工信息
 export function querysupersonList (id) {
     return TestRequst({
         url: `/mendian/supersonList/${id}`,
         method: 'get'
     })
+}
+export function savemendian(params){
+  return TestRequst({
+    url:'/mendian',
+    method:'post',
+    data:{...params}
+  })
+}
+export function update(params){
+  return TestRequst({
+    url:'/mendian/update',
+    method:'post',
+    data:{...params}
+  })
 }

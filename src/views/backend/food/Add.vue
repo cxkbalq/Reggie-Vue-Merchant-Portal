@@ -187,7 +187,7 @@
               v-if="actionType == 'add'"
               type="primary"
               class="continue"
-              @click="submitForm('ruleForm','goAnd')"
+              @click="submitForm('ruleForm',1)"
             >
               保存并继续添加菜品
             </el-button>
@@ -412,11 +412,10 @@ export default {
           }
           if (this.actionType == 'add') {
             delete params.id
-
             addDish(params).then(res => {
               if (res.code === 1) {
                 this.$message.success('菜品添加成功！')
-                if (!st) {
+                if (st!==1) {
                   this.goBack()
                 } else {
                   this.dishFlavors = []

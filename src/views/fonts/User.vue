@@ -117,6 +117,9 @@ export default {
       const res = await orderPagingApi(params)
       if(res.code === 1){
         this.order = res.data.records
+        // if ( this.order[0].orderDetails==='undefined'){
+        //   alert(dwd)
+        // }
         if(this.order && this.order[0].orderDetails){
           let number = 0
           this.order[0].orderDetails.forEach(item=>{

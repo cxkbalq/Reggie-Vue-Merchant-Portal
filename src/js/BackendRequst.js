@@ -6,7 +6,7 @@ const instance = axios.create({
   // baseURL: 'http://123.60.129.35:8080/',
   timeout:16000,
 });
-
+const source = axios.CancelToken.source();
 instance.interceptors.request.use(
   (config) => {
     const jwtToken = localStorage.getItem('dengliObj');
@@ -16,14 +16,27 @@ instance.interceptors.request.use(
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     if (userInfo && userInfo.id) {
       console.log(userInfo.id);
-      config.headers['employee'] = userInfo.id;
+      //将门店id,登录id，携带在请求头中，告知后端，是在操作那个门店
+      config.headers['Employee'] = userInfo.id;
+      config.headers['mendian'] = userInfo.mendianId;
     }else {
       //直接退出到登录面
-      // window.location.assign('http://localhost:8081/login');
+      //消息提示
+      // Vue.prototype.$message({
+      //   message: "当前登录过期，正在为你跳转到登录页面",
+      //   type: 'error',
+      //   duration: 1000,
+      // })
+      // // 添加延迟 2秒后执行的操作,优化用户体验
+      // setTimeout(() => {
+      //   window.requestAnimationFrame(()=>{
+      //     window.location.href= '#/login'
+      //   })
+      // }, 1000);
+      // // 直接中止请求，不发生实际网络请求
+      // source.cancel('No userInfo available');
     }
     // 在这里可以进行一些请求前的操作
-    let a=store.state.obj.loading
-    console.log(a)
     store.commit('updateloading',true)
     // this.$store.commit('updateloading',true)
     return config;
@@ -46,14 +59,18 @@ instance.interceptors.response.use(
        Vue.prototype.$message({
           message: "当前登录过期，正在为你跳转到登录页面",
           type: 'error',
-          duration: 0,
+          duration: 1000,
         })
       // 添加延迟 2秒后执行的操作,优化用户体验
       setTimeout(() => {
-        window.location.assign('http://localhost:8081/#/login');
+        window.requestAnimationFrame(()=>{
+          window.location.href= '#/login'
+        })
       }, 1000);
+      store.commit('updateloading',false)
       return response.data;
     } else {
+      store.commit('updateloading',false)
       return response.data;
     }
   },

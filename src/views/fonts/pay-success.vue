@@ -37,7 +37,7 @@ export default {
   methods:{
     goBack(){
       window.requestAnimationFrame(()=>{
-        window.location.replace('#/front/index')
+        window.location.replace('#/front/page/mendian')
       })
     },
     toOrderPage(){
@@ -47,7 +47,7 @@ export default {
     },
     toMainPage(){
       window.requestAnimationFrame(()=>{
-        window.location.replace('#/front/index')
+        window.location.replace('#/front/page/mendian')
       })
     },
     //获取送达时间

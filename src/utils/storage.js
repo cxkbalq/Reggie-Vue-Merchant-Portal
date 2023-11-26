@@ -8,7 +8,7 @@ import { changeCount } from '@/api/cart'
 const INFO_KEY='dengliObj'
 
 export const getInfo=()=>{
-  const def='kong'
+  const def={token:'',userid:''}
   const res=localStorage.getItem(INFO_KEY)
   return res? JSON.parse(res):def
 }

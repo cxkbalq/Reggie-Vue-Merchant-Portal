@@ -199,6 +199,7 @@ export default {
       this.$confirm('确认删除该菜品, 是否继续?', '确定删除', {
         'confirmButtonText': '确定',
         'cancelButtonText': '取消',
+        'type': 'warning'
       }).then(() => {
         deleteDish(type === '批量' ? this.checkList.join(',') : id).then(res => {
           if (res.code === 1) {
@@ -210,7 +211,9 @@ export default {
         }).catch(err => {
           this.$message.error('请求出错了：' + err)
         })
-      })
+      }).catch(action => {
+        this.$message.warning('你取消了操作')
+      });
     },
 
     //状态更改
@@ -247,7 +250,9 @@ export default {
         }).catch(err => {
           this.$message.error('请求出错了：' + err)
         })
-      })
+      }).catch(action => {
+        this.$message.warning('你取消了操作')
+      });
     },
 
     // 全部操作

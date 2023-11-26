@@ -25,6 +25,7 @@ import mendainView from "@/views/fonts/mendian.vue";
 import Search from "@/views/fonts/search/index.vue";
 import SearchList from "@/views/fonts/search/list.vue";
 import FrontHome from "@/views/fonts/home.vue";
+import selectIndex from "@/views/backend/mendian/select.vue";
 // 注册路由
 Vue.use(VueRouter)
 const router =new VueRouter({
@@ -57,6 +58,7 @@ const router =new VueRouter({
     {path: '/front/search', component:Search},
     {path: '/front/searchlist', component:SearchList},
     {path: '/front/home', component:FrontHome},
+    {path: '/select', component:selectIndex},
  ]
 })
 //全局守卫拦截器
