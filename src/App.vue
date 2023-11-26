@@ -26,7 +26,7 @@ nav {
 <script>
 export default {
   created() {
-    // this.checkDeviceAndRedirect();
+    this.checkDeviceAndRedirect();
   },
   methods: {
     isMobileDevice() {
@@ -36,7 +36,7 @@ export default {
       if (this.isMobileDevice()) {
         // 手机端打开
         console.log("当前为手机端");
-        this.$router.push("/login")
+        this.$router.push("/front/page/mendian")
       } else {
         // 电脑端打开
         console.log("当前为电脑端");

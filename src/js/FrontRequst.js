@@ -68,7 +68,7 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
-      Toast.clear()
+    Toast.clear()
     const msg = response.data.msg;
     store.commit('updateloading',false)
     if (msg == 'NOT_LOGIN') {
@@ -93,6 +93,7 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
+    Toast.clear()
     let { message } = error;
     if (message == "Network Error") {
       message = "后端接口连接异常";

@@ -51,7 +51,8 @@ export default {
     return {
       paging:{
         page:1,
-        pageSize:5
+        pageSize:5,
+        number:JSON.parse(localStorage.getItem("user")).id
       },
       orderList:[],
       loading:false,
