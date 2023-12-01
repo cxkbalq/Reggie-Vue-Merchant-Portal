@@ -166,7 +166,7 @@ export default {
         });
     },
     getImage(image) {
-      return `/common/download?name=${image}`;
+      return `http://123.60.129.35:8080/common/download?name=${image}`;
     },
     handleQuery() {
       this.page = 1;
