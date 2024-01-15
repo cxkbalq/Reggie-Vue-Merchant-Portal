@@ -12,7 +12,6 @@ import MemberAdd from "@/views/backend/member/Add.vue";
 import OrderIndex from "@/views/backend/order/Index.vue";
 import LoginIndex from "@/views/backend/login/Index.vue";
 import ComboAdd from "@/views/backend/combo/Add.vue";
-import Gaode from "@/views/GaoDe.vue";
 import FrontLogin from "@/views/fonts/login.vue"
 import FrontIndex from "@/views/fonts/Index.vue"
 import AddOrder from "@/views/fonts/add-order.vue"
@@ -44,7 +43,6 @@ const router =new VueRouter({
    {path: '/page/order/list', component:OrderIndex},
    {path: '/login', component:LoginIndex},
    {path: '/page/member/add', component:MemberAdd},
-   {path: '/gaode', component:Gaode},
     //这些是用户端
     {path: '/front/login', component:FrontLogin},
     {path: '/front/index', component:FrontIndex},
