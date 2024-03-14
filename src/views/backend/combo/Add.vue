@@ -64,7 +64,7 @@
           <el-form-item label="套餐图片:" class="uploadImg">
             <el-upload
               class="avatar-uploader"
-              action="`http://123.60.129.35:8080/common/upload"
+              action="`http://123.60.129.35:88/common/upload"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :on-change="onChange"

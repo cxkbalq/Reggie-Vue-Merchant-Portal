@@ -32,6 +32,7 @@ export default {
       //设置当前点击的店铺id
       this.$store.commit("updatestater",this.item.id)
       // 使用 query 传递参数
+      localStorage.setItem("md",JSON.stringify(this.item))
       this.$router.push({
         path:'/front/index',
         query:{item:this.item}

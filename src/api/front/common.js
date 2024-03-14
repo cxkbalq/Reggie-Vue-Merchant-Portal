@@ -1,7 +1,7 @@
 var web_prefix = '/front'
 
 export function imgPath(path){
-    return 'http://123.60.129.35:8080/common/download?name=' + path
+    return 'http://123.60.129.35:88/api/common/download?name=' + path
 }
 
 //将url传参转换为数组

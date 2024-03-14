@@ -3,8 +3,8 @@ import Vue from 'vue'; // 确保导入 Vue
 import store from "@/store";
 import {Notify, Toast} from 'vant';
 const instance = axios.create({
-  // baseURL: 'http://127.0.0.1:8080/',
-  baseURL: 'http://123.60.129.35:8080/',
+  // baseURL: 'http://127.0.0.1:8080/api/',
+  baseURL: 'http://123.60.129.35:88/api/',
   timeout:16000,
 });
 
@@ -13,6 +13,7 @@ instance.interceptors.request.use(
     Toast.loading({
       message: '加载中...',
       forbidClick: true,
+
       loadingType: 'spinner',
       duration:0
     });

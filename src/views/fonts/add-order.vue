@@ -51,6 +51,17 @@
           show-word-limit
         />
       </div>
+      <div class="pay">
+        <van-field name="radio" label="支付方式">
+          <template #input>
+            <van-radio-group v-model="checked" direction="horizontal">
+              <van-radio name="1" >支付宝</van-radio>
+              <van-radio name="2">微信</van-radio>
+            </van-radio-group>
+          </template>
+        </van-field>
+      </div>
+
     </div>
     <div class="divCart">
       <div :class="{imgCartActive: cartData && cartData.length > 0, imgCart:!cartData || cartData.length<1}"></div>
@@ -60,19 +71,23 @@
         <span>{{goodsPrice}}</span>
       </div>
       <div class="divPrice"></div>
-      <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="goToPaySuccess">去支付</div>
+      <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="goToPaySuccess">提交订单</div>
     </div>
   </div>
 </template>
 
 <script>
 import setRem from "@/js/base";
-import {orderAgainApi,addOrderApi,orderListApi,orderPagingApi} from  "@/api/front/order"
+import {orderAgainApi, addOrderApi, orderListApi, orderPagingApi, payOredes} from "@/api/front/order"
 import {addAddressApi,addressFindOneApi,addressLastUpdateApi,addressListApi,deleteAddressApi,getDefaultAddressApi,setDefaultAddressApi,updateAddressApi} from "@/api/front/address"
 import {cartListApi} from "@/api/front/main";
 import {imgPath} from "@/api/front/common";
+import PaySuccess from "@/views/fonts/pay-success.vue";
+import {Toast} from "vant";
+import myCustomImage from "@/images/1.png";
 export default {
   name: "AddOrder",
+  components: {},
   data(){
     return {
       address:{
@@ -84,7 +99,9 @@ export default {
       },
       finishTime:'',//送达时间
       cartData:[],
-      note:''//备注信息
+      note:'',//备注信息
+      checked:'1',
+      msg:''
     }
   },
   computed:{
@@ -161,19 +178,32 @@ export default {
         this.$notify({ type:'warning', message:res.msg});
       }
     },
+    //支付跳转页面
     async goToPaySuccess(){
       const params = {
         remark:this.note,
         payMethod:1,
         addressBookId:this.address.id
       }
-      const res = await addOrderApi(params)
-      if(res.code === 1){
-        window.requestAnimationFrame(()=>{
-          window.location.replace('#/front/page/paysuccess')
-        })
+      //将信息本地化
+      if(this.checked==='1'){
+        localStorage.setItem("dingdan",JSON.stringify(params))
+        //调整到支付页面
+        var res = await addOrderApi(params);
+        if(res.code===1){
+          //调整到支付页面
+          //将字符串转换为整形数字
+
+          this.$router.push({path:'/front/waitpay',query:{id:res.data,flag:0}})
+        }else {
+          this.$notify({type: 'warning', message: res.msg});
+        }
+
       }else{
-        this.$notify({ type:'warning', message:res.msg});
+        Toast({
+          message: '微信支付接入中！',
+          icon: myCustomImage,
+        });
       }
     },
     //网络图片路径转换
@@ -183,8 +213,6 @@ export default {
   }
 }
 </script>
-
-
 
 <style scoped lang="less">
 @import "@/styles/front/add-order.css";

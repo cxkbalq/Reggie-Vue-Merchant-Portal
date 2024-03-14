@@ -2,8 +2,8 @@ import axios from 'axios'
 import Vue from 'vue'; // 确保导入 Vue
 import store from "@/store";
 const instance = axios.create({
-  // baseURL: 'http://127.0.0.1:8080/',
-  baseURL: 'http://123.60.129.35:8080/',
+  // baseURL: 'http://127.0.0.1:8080/api/',
+  baseURL: 'http://123.60.129.35:88/api/',
   timeout:16000,
 });
 const source = axios.CancelToken.source();

@@ -49,7 +49,7 @@
           <template slot-scope="{ row }">
             <el-image style="width: auto; height: 40px; border:none;cursor: pointer;"
                       :src="getImage(row.image)"
-                      :preview-src-list="[ `http://123.60.129.35:8080/common/download?name=${row.image}` ]" >
+                      :preview-src-list="[ `http://123.60.129.35:88/common/download?name=${row.image}` ]" >
               <div slot="error" class="image-slot">
                 <img src="../../../images/noImg.png" style="width: auto; height: 40px; border:none;" >
               </div>

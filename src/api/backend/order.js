@@ -24,3 +24,9 @@ export function editOrderDetail (params) {
     data: { ...params }
   })
 }
+export function getOrderstime () {
+  return TestRequst({
+    url: '/order/getordertime',
+    method: 'put',
+  })
+}
