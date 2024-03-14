@@ -1,10 +1,10 @@
 <template>
   <div id="order" class="app">
     <div class="divHead">
-    <div class="divTitle">
-      <el-button type="primary" icon="el-icon-arrow-left" style="height: 30px" id="test" @click="goBack"></el-button>
+      <div class="divTitle">
+        <i class="el-icon-arrow-left" @click="goBack"></i>菩提阁
+      </div>
     </div>
-  </div>
     <div class="divBody" v-if="orderList.length > 0">
       <van-list
         v-model="loading"
@@ -15,20 +15,28 @@
         <van-cell v-for="(order,index) in orderList" :key="index" class="item">
           <div class="timeStatus">
             <span>{{order.orderTime}}</span>
-            <span>{{getStatus(order.status)}}</span>
-            <!-- <span>正在派送</span> -->
           </div>
           <div class="dishList">
             <div v-for="(item,index) in order.orderDetails" :key="index" class="item">
               <span>{{item.name}}</span>
-              <span>x{{item.number}}</span>
+              <span>{{item.number}}</span>
             </div>
           </div>
-          <div class="result">
-            <span>共{{order.sumNum}} 件商品,实付</span><span class="price">￥{{order.amount}}</span>
-          </div>
-          <div class="btn" v-if="order.status === 4">
-            <div class="btnAgain" @click="addOrderAgain(order)">再来一单</div>
+          <div class="result" @click="waitpay(order)">
+            <span class="btn" v-if="order.status === 4">
+              <van-tag type="success" class="biaoqian">已完成</van-tag>
+            </span>
+            <span class="btn" v-if="order.status === 2">
+              <van-tag type="primary" class="biaoqian">派送中</van-tag>
+            </span>
+            <span class="btn" v-if="order.status === 1">
+              <van-tag type="warning" class="biaoqian">待支付</van-tag>
+            </span>
+            <span class="btn" v-if="order.status === 3">
+              <van-tag  color="#2e6737" class="biaoqian">已派送</van-tag>
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="price">￥{{order.amount}}</span>
           </div>
         </van-cell>
       </van-list>
@@ -45,6 +53,10 @@
 <script>
 import setRem from "@/js/base";
 import {orderPagingApi,orderAgainApi,orderListApi,addOrderApi} from "@/api/front/order";
+import waitPay from "@/views/fonts/wait-pay.vue";
+import myCustomImage from "@/images/1.png";
+import {Toast} from "vant";
+import router from "@/router";
 export default {
   name: "FrontOrder",
   data(){
@@ -59,7 +71,11 @@ export default {
       finished:false
     }
   },
-  computed:{},
+  computed:{
+    waitPay() {
+      return waitPay
+    }
+  },
   created(){
     setRem(document, window);
     this.initData()
@@ -85,9 +101,11 @@ export default {
         this.loading = false;
         return
       }
+
       const res = await orderPagingApi(this.paging)
       if(res.code === 1){
         this.orderList.push(...res.data.records)
+        this.orderList.sort((a, b) => a.status - b.status);
         let records = res.data.records
         if(records && Array.isArray(records)){
           records.forEach(item=>{
@@ -107,37 +125,30 @@ export default {
         this.$notify({ type:'warning', message:res.msg});
       }
     },
-    async addOrderAgain(order){
-      const res = await orderAgainApi({id:order.id})
-      if(res.code === 1){
-        window.requestAnimationFrame(()=>{
-          window.location.href= '#/front/page/mendian'
-        })
-      }else{
-        this.$notify({ type:'warning', message:res.msg});
+    async waitpay(order){
+      if (order.status===1){
+        //调整到支付页面
+        this.$router.push({path:'/front/waitpay',query:{id:order.id}})
+        // router.push({name: )
       }
-    },
-    getStatus(status){
-      let str = ''
-      switch(status){
-        case 1:
-          str =  '待付款'
-          break;
-        case 2:
-          str =  '正在派送'
-          break;
-        case 3:
-          str =  '已派送'
-          break;
-        case 4:
-          str =  '已完成'
-          break;
-        case 5:
-          str =  '已取消'
-          break;
-
+      if(order.status===2){
+        Toast({
+          message: '正在派送中！',
+          icon: myCustomImage,
+        });
       }
-      return str
+      if(order.status==3){
+        Toast({
+          message: '可以取餐啦！',
+          icon: myCustomImage,
+        });
+      }
+      if(order.status===4){
+        Toast({
+          message: '这个订单完成啦！',
+          icon: myCustomImage,
+        });
+      }
     }
   }
 }
@@ -146,10 +157,6 @@ export default {
 
 <style scoped lang="less">
 @import "@/styles/front/address.css";
-.divTitle{
-  background-color: #5a5e66;
-  height: 40px;
-}
 #test{
   width: 10px;
   position: relative;
@@ -157,5 +164,31 @@ export default {
   background-color: #5a5e66;
   border-radius: 0px;
   border-color: #5a5e66;
+}
+#order .divHead {
+  width: 100%;
+  height: 50rem;
+  opacity: 1;
+  background: #333333;
+  position: relative;
+}
+
+#order .divHead .divTitle {
+  font-size: 18rem;
+  font-weight: 500;
+  text-align: center;
+  color: #ffffff;
+  line-height: 25rem;
+  letter-spacing: 0;
+  position: absolute;
+  bottom: 13rem;
+  width: 100%;
+}
+
+#order .divHead .divTitle i {
+  position: absolute;
+  left: 16rem;
+  top: 50%;
+  transform: translate(0, -50%);
 }
 </style>

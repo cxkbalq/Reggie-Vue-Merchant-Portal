@@ -7,7 +7,7 @@
       <div class="divUser">
         <img src="@/images/front/headPage.png"/>
         <div class="desc">
-          <div class="divName">林之迷 <img src="@/images/front/women.png"/></div>
+          <div class="divName">cxkbalq <img src="@/images/front/women.png"/></div>
           <div class="divPhone">{{userPhone}}</div>
         </div>
       </div>

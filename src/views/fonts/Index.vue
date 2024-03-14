@@ -7,7 +7,7 @@
     <div class="divTitle">
       <div class="divStatic">
 <!--        <img src="@/images/front/logo.png"  class="logo1"/>-->
-        <img :src="imgPathConvert(item.image)"  class="logo1"/>
+        <img :src="imgPathConvert( item.image)"  class="logo1"/>
 
         <div class="divDesc">
           <div class="divName">{{item.name}}</div>
@@ -60,7 +60,7 @@
     </div>
     <div class="divLayer">
       <div class="divLayerLeft"></div>
-      <div class="divLayerRight"></div>
+
     </div>
     <div class="divCart" v-if="categoryList.length > 0">
       <div :class="{imgCartActive: cartData && cartData.length > 0, imgCart:!cartData || cartData.length<1}" @click="openCart"></div>
@@ -259,7 +259,7 @@ export default {
   },
   created(){
     setRem(document, window);
-    this.item=this.$route.query.item
+    this.item=JSON.parse(localStorage.getItem("md"));
   },
   watch:{
     'dialogFlavor.show'(flag){

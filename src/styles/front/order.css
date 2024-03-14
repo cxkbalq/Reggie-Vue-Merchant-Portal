@@ -100,31 +100,24 @@
 }
 
 #order .divBody .item .result .price {
-  color: #343434;
+  /*color: #343434;*/
+  color: #409eff;
+  /*display: inline-block;*/
+  width: 30px;
+  background-color: #409eff;
 }
 
 #order .divBody .item .btn {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   margin-bottom: 17rem;
   margin-top: 20rem;
+  position: absolute;
 }
 
-#order .divBody .btn .btnAgain {
-  width: 124rem;
-  height: 36rem;
-  opacity: 1;
-  border: 1px solid #e5e4e4;
-  border-radius: 19rem;
-  opacity: 1;
-  font-size: 14rem;
-  font-family: PingFangSC, PingFangSC-Regular;
-  font-weight: 500;
-  text-align: center;
-  color: #333333;
-  line-height: 36rem;
-  letter-spacing: 0;
-  position: relative;
+#order .divBody .btn .biaoqian {
+  /*控制子盒子之间的间距*/
+  padding-left: 30rem;
 }
 
 #order .divNoData {
